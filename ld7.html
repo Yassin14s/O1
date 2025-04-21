@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Liste - Programme de coopération bilatérale 2024-2029</title>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #d32f2f;
+            --secondary-color: #ffcc00;
+            --accent-color: #4CAF50;
+            --background-gradient: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+            --card-background: #ffffff;
+            --shadow: 0 8px 20px rgba(0,0,0,0.1);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            background: var(--background-gradient);
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .header {
+            background-color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            width: 160px;
+            height: auto;
+            margin-bottom: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-color);
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .main-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .card {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: var(--transition);
+        }
+        
+        .card:hover {
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+        }
+        
+        .event-selection {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 14px 16px;
+            margin: 10px 0;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            transition: var(--transition);
+            background-color: #f9f9f9;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.2);
+            background-color: white;
+        }
+        
+        .button {
+            background: var(--secondary-color);
+            color: #333;
+            border: none;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 8px 5px;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .button:hover {
+            background: #d4ac0d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .button-primary {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .button-primary:hover {
+            background: #b71c1c;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            font-weight: 500;
+            background: transparent;
+            color: #666;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .tab.active {
+            background: var(--secondary-color);
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: #e5e5e5;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .signature-container {
+            margin: 15px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+            height: 200px;
+        }
+        
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        /* Scanner QR */
+        #qr-reader {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .camera-controls {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+            gap: 10px;
+        }
+        
+        /* Messages */
+        .status-message {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+            animation: slideIn 0.3s ease-in-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .success-message {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #f44336;
+        }
+        
+        .attendance-success {
+            position: relative;
+            margin: 20px 0;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+            box-shadow: var(--shadow);
+        }
+        
+        .attendance-success h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .qr-link {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: var(--transition);
+        }
+        
+        .qr-link:hover {
+            background-color: #3d8b40;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+        
+        /* Admin access */
+        .admin-access {
+            margin-top: 40px;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 30px;
+            text-align: center;
+        }
+        
+        /* Autocomplete */
+        .autocomplete-container {
+            position: relative;
+            width: 100%;
+            z-index: 100;
+        }
+        
+        .autocomplete-list {
+            position: absolute;
+            width: 100%;
+            background: white;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+            z-index: 100;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .autocomplete-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .autocomplete-item:hover {
+            background: #f5f5f5;
+        }
+        
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            color: #757575;
+            font-size: 14px;
+            background-color: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 0 15px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .form-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .button {
+                width: 100%;
+                margin: 5px 0;
+            }
+            
+            .camera-controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <img src="https://www.enabel.be/app/uploads/2023/04/Enabel_Logo_Color_RGB.png" alt="Enabel Logo" class="logo">
+            <h1>E-Liste - Programme de coopération bilatérale 2024-2029</h1>
+        </div>
+    </header>
+    
+    <div class="main-container">
+        <div class="card">
+            <div class="event-selection">
+                <h3 class="section-title">Sélectionner un événement</h3>
+                <select id="eventSelect">
+                    <option value="1">Programme de coopération bilatérale 2025</option>
+                    <!-- Les autres événements seront chargés dynamiquement -->
+                </select>
+            </div>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('manual-form', this)">Inscription Manuelle</button>
+                <button class="tab" onclick="showTab('qr-scanner', this)">Scanner QR Code</button>
+            </div>
+            
+            <!-- Message d'état -->
+            <div id="status-message" class="status-message"></div>
+            
+            <!-- Message de succès avec lien pour voir les présences -->
+            <div id="attendance-success" class="attendance-success">
+                <h3>Présence enregistrée avec succès!</h3>
+                <div id="attendance-message" class="attendance-message"></div>
+                <div class="qr-link-container">
+                    <a href="#" id="qr-link" class="qr-link">Obtenir votre QR code</a>
+                </div>
+            </div>
+            
+            <!-- Formulaire d'inscription manuel -->
+            <div id="manual-form" class="tab-content active">
+                <form id="presenceForm">
+                    <input type="text" id="nom" placeholder="Nom" required>
+                    <input type="text" id="prenom" placeholder="Prénom" required>
+                    <input type="text" id="organisme" placeholder="Organisme" required>
+                    <input type="text" id="fonction" placeholder="Fonction" required>
+                    <input type="tel" id="portable" placeholder="Numéro de portable" required>
+                    <input type="email" id="email" placeholder="Email" required>
+                    <input type="number" id="age" placeholder="Âge" required min="0">
+
+<div class="gender-selection">
+    <label>Genre:</label>
+    <div class="radio-group">
+        <label class="radio-container">
+            <input type="radio" name="genre" value="H" required> Homme
+            <span class="radio-checkmark"></span>
+        </label>
+        <label class="radio-container">
+            <input type="radio" name="genre" value="F"> Femme
+            <span class="radio-checkmark"></span>
+        </label>
+    </div>
+</div>
+
+<!-- Style CSS à ajouter dans la balise <style> existante -->
+<style>
+.gender-selection {
+    margin: 15px 0;
+}
+
+.gender-selection label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+}
+
+.radio-container {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+}
+
+.radio-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.radio-checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+}
+
+.radio-container:hover input ~ .radio-checkmark {
+    background-color: #f0f0f0;
+}
+
+.radio-container input:checked ~ .radio-checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.radio-checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.radio-container input:checked ~ .radio-checkmark:after {
+    display: block;
+    top: 5px;
+    left: 5px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+}
+</style>
+
+</style>
+                    
+                    <div class="signature-container">
+                        <canvas id="signature"></canvas>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="button" class="button" onclick="clearSignature()">Effacer la signature</button>
+                        <button type="button" class="button button-primary" onclick="saveData()">Valider l'inscription</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Section Scanner QR -->
+            <div id="qr-scanner" class="tab-content">
+                <p style="margin-bottom: 15px;">Scannez votre QR code pour marquer votre présence</p>
+                
+                <div class="camera-controls">
+                    <button class="button" onclick="startScanner()">Activer la caméra</button>
+                    <button class="button" onclick="stopScanner()">Désactiver la caméra</button>
+                </div>
+                
+                <div id="qr-reader"></div>
+            </div>
+        </div>
+        
+        <div class="admin-access card">
+            <h3 class="section-title">Accès administrateur</h3>
+            <input type="password" id="accessCode" placeholder="Entrez le code d'administration">
+            <button class="button button-primary" onclick="checkAccess()">🔑 Accéder aux données</button>
+            
+            <br><br>
+
+
+        
+<div id="debug-info"></div>
+        </div>
+        
+        <div id="debug-info" style="display: none;"></div>
+    </div>
+    
+    <footer class="footer">
+        © 2025 Yassin BRAHIM - AT Digitale. Tous droits réservés.
+    </footer>
+    
+    <script>
+        // Variable pour afficher les informations de débogage
+        const debugElement = document.getElementById('debug-info');
+        
+        function debug(message) {
+            // Fonction désactivée pour ne plus afficher les messages de débogage
+            // console.log(message);
+        }
+        
+        // Initialisation du pad de signature
+        let signaturePad;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser le pad de signature
+            const canvas = document.getElementById('signature');
+            
+            // Ajuster la taille du canvas à celle de son conteneur
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            
+            signaturePad = new SignaturePad(canvas, {
+                backgroundColor: 'rgb(255, 255, 255)'
+            });
+            
+            // Gérer le redimensionnement du canvas lors du changement de taille de fenêtre
+            window.addEventListener('resize', resizeCanvas);
+            
+            function resizeCanvas() {
+                const ratio = Math.max(window.devicePixelRatio || 1, 1);
+                canvas.width = container.clientWidth;
+                canvas.height = container.clientHeight;
+                signaturePad.clear(); // Nécessaire après un redimensionnement
+            }
+            
+            // Charger les événements
+            loadEvents();
+        });
+        
+        function clearSignature() {
+            if (signaturePad) {
+                signaturePad.clear();
+            }
+        }
+        
+        // Variable globale pour le scanner QR
+        let html5QrCode;
+        let scannerActive = false;
+        
+        // Variable pour stocker l'événement actuel
+        let currentEventId = "1";
+        
+// Fonction pour charger la liste des événements
+function loadEvents() {
+    fetch('get_events.php')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Réponse réseau non OK: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const eventSelect = document.getElementById('eventSelect');
+            eventSelect.innerHTML = '';
+            
+            // Ajouter les événements
+            if (data.length === 0) {
+                const option = document.createElement('option');
+                option.value = "1";
+                option.textContent = "Programme de coopération bilatérale 2025";
+                eventSelect.appendChild(option);
+            } else {
+                data.forEach(event => {
+                    const option = document.createElement('option');
+                    option.value = event.id;
+                    option.textContent = event.name + ' (' + event.date + ')';
+                    eventSelect.appendChild(option);
+                });
+            }
+            
+            // Définir l'événement actuel
+            currentEventId = eventSelect.value;
+            
+            // Ajouter l'événement change
+            eventSelect.addEventListener('change', function() {
+                currentEventId = this.value;
+            });
+        })
+        .catch(error => {
+            // Utiliser l'événement par défaut
+            const eventSelect = document.getElementById('eventSelect');
+            eventSelect.innerHTML = '<option value="1">Programme de coopération bilatérale 2025</option>';
+            currentEventId = "1";
+        });
+}
+        
+        // Fonction pour afficher/masquer les onglets
+        function showTab(tabId, clickedTab) {
+            // Masquer tous les contenus d'onglet
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Désactiver tous les onglets
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Afficher le contenu de l'onglet sélectionné
+            document.getElementById(tabId).classList.add('active');
+            
+            // Activer l'onglet cliqué
+            if (clickedTab) {
+                clickedTab.classList.add('active');
+            }
+            
+            // Masquer le message de succès
+            document.getElementById('attendance-success').style.display = 'none';
+            
+            // Si l'onglet de scanner QR est sélectionné, initialiser le scanner
+            if (tabId === 'qr-scanner') {
+                initScanner();
+            } else {
+                // Si on passe à un autre onglet, arrêter le scanner
+                stopScanner();
+            }
+        }
+        
+        // Fonction pour sauvegarder les données du formulaire
+        function saveData() {
+            if (!signaturePad || signaturePad.isEmpty()) {
+                showStatusMessage("Veuillez signer avant de valider.", false);
+                return;
+            }
+            
+            const eventSelect = document.getElementById('eventSelect');
+            
+            let formData = new FormData();
+            formData.append("nom", document.getElementById("nom").value);
+            formData.append("prenom", document.getElementById("prenom").value);
+            formData.append("organisme", document.getElementById("organisme").value);
+            formData.append("fonction", document.getElementById("fonction").value);
+            formData.append("portable", document.getElementById("portable").value);
+            formData.append("email", document.getElementById("email").value);
+            formData.append("age", document.getElementById("age").value);
+            formData.append("signature", signaturePad.toDataURL());
+            formData.append("eventId", eventSelect.value);
+            
+            fetch("save.php", {
+                method: "POST",
+                body: formData
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur de réseau: ' + response.status);
+                }
+                return response.text();
+            }).then(data => {
+                // Afficher le message de succès et préparer les liens
+                document.getElementById('attendance-success').style.display = 'block';
+                document.getElementById('attendance-message').innerHTML = data;
+                
+                // Extraire l'URL du QR code s'il existe dans la réponse
+                const qrLinkMatch = data.match(/href=['"]([^'"]+)['"]/);
+                if (qrLinkMatch && qrLinkMatch[1]) {
+                    const qrLink = document.getElementById('qr-link');
+                    qrLink.href = qrLinkMatch[1];
+                    qrLink.style.display = 'inline-block';
+                }
+                
+                // Réinitialiser le formulaire
+                document.getElementById("presenceForm").reset();
+                clearSignature();
+                
+                // Faire défiler jusqu'au message
+                document.getElementById('attendance-success').scrollIntoView({ behavior: 'smooth' });
+            }).catch(error => {
+                showStatusMessage("Erreur: " + error.message, false);
+            });
+        }
+        
+        // Fonction pour vérifier le code d'accès
+        function checkAccess() {
+            let code = document.getElementById("accessCode").value;
+            if (code === "1414") {
+                window.location.href = "view.php";
+            } else {
+                showStatusMessage("Code incorrect !", false);
+            }
+        }
+        
+        // Fonction pour afficher un message d'état
+        function showStatusMessage(message, isSuccess) {
+            const statusMessage = document.getElementById("status-message");
+            statusMessage.innerHTML = message;
+            statusMessage.style.display = "block";
+            
+            if (isSuccess) {
+                statusMessage.className = "status-message success-message";
+            } else {
+                statusMessage.className = "status-message error-message";
+            }
+            
+            // Masquer le message après 5 secondes
+            setTimeout(() => {
+                statusMessage.style.display = "none";
+            }, 5000);
+        }
+        
+        // Fonctions pour le scanner QR
+        function initScanner() {
+            if (!html5QrCode && !scannerActive) {
+                try {
+                    html5QrCode = new Html5Qrcode("qr-reader");
+                } catch (error) {
+                    showStatusMessage("Erreur d'initialisation du scanner: " + error.message, false);
+                }
+            }
+        }
+        
+        function startScanner() {
+            if (!html5QrCode) {
+                initScanner();
+            }
+            
+            if (html5QrCode && !scannerActive) {
+                // Calculer la taille du container pour un scan en plein écran
+                const qrContainer = document.getElementById('qr-reader');
+                const containerWidth = qrContainer.clientWidth;
+                
+                // Définir le rectangle de scan à la même taille que le conteneur (format 1:1)
+                const qrConfig = { 
+                    fps: 10, 
+                    qrbox: { 
+                        width: containerWidth * 0.8,
+                        height: containerWidth * 0.8
+                    } 
+                };
+                
+                html5QrCode.start(
+                    { facingMode: "environment" }, // Utiliser la caméra arrière
+                    qrConfig,
+                    onScanSuccess,
+                    onScanFailure
+                ).then(() => {
+                    scannerActive = true;
+                    showStatusMessage("Caméra activée avec succès", true);
+                }).catch(err => {
+                    showStatusMessage("Impossible d'accéder à la caméra: " + err, false);
+                });
+            }
+        }
+        
+        function stopScanner() {
+            if (html5QrCode && scannerActive) {
+                html5QrCode.stop().then(() => {
+                    scannerActive = false;
+                }).catch(err => {
+                    // Ignorer les erreurs d'arrêt
+                });
+            }
+        }
+        
+        function onScanSuccess(decodedText, decodedResult) {
+            // Arrêter le scanner après un scan réussi
+            stopScanner();
+            
+            try {
+                // Vérifier si c'est déjà du JSON
+                let qrData;
+                try {
+                    // Essayer de parser pour voir si c'est déjà du JSON
+                    JSON.parse(decodedText);
+                    qrData = decodedText;
+                } catch (e) {
+                    // Si ce n'est pas du JSON, créer un objet avec l'email
+                    qrData = JSON.stringify({
+                        "email": decodedText
+                    });
+                }
+                
+                // Envoyer les données scannées pour marquer la présence
+                let formData = new FormData();
+                formData.append("qrData", qrData);
+                formData.append("eventId", currentEventId);
+                
+                fetch("mark_attendance.php", {
+                    method: "POST",
+                    body: formData
+                }).then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur de réseau: ' + response.status);
+                    }
+                    return response.text();
+                }).then(data => {
+                    // Afficher le message de succès
+                    const attendanceSuccess = document.getElementById('attendance-success');
+                    if (attendanceSuccess) {
+                        attendanceSuccess.style.display = 'block';
+                        
+                        const attendanceMessage = document.getElementById('attendance-message');
+                        if (attendanceMessage) {
+                            attendanceMessage.innerHTML = data;
+                        }
+                        
+                        // Extraire l'URL du QR code s'il existe dans la réponse
+                        const qrLinkMatch = data.match(/href=['"]([^'"]+)['"]/);
+                        const qrLink = document.getElementById('qr-link');
+                        
+                        if (qrLinkMatch && qrLinkMatch[1] && qrLink) {
+                            qrLink.href = qrLinkMatch[1];
+                            qrLink.style.display = 'inline-block';
+                        } else if (qrLink) {
+                            qrLink.style.display = 'none';
+                        }
+                        
+                        // Faire défiler jusqu'au message
+                        attendanceSuccess.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    
+                }).catch(error => {
+                    showStatusMessage("Erreur lors de l'enregistrement: " + error.message, false);
+                });
+            } catch (error) {
+                showStatusMessage("QR Code invalide: " + error.message, false);
+            }
+        }
+        
+        function onScanFailure(error) {
+            // Gérer les échecs de scan silencieusement
+            if (error !== "No QR code found") {
+                // Ignorer les erreurs courantes
+            }
+        }
+    </script>
+    
+    <!-- Script pour l'autocomplétion -->
+    <script>
+        // Créer un conteneur d'autocomplétion pour le champ nom
+        const nomInput = document.getElementById('nom');
+        const autocompleteContainer = document.createElement('div');
+        autocompleteContainer.className = 'autocomplete-container';
+        autocompleteContainer.style.display = 'none';
+        nomInput.parentNode.insertBefore(autocompleteContainer, nomInput.nextSibling);
+
+        // Variables pour stocker les participants
+        let participants = [];
+
+        // Charger les participants dès que la page est chargée
+        document.addEventListener('DOMContentLoaded', function() {
+            // Charger les données des participants
+            fetch('get_participants.php')
+                .then(response => response.json())
+                .then(data => {
+                    participants = data;
+                    console.log('Participants chargés:', participants.length);
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des participants:', error);
+                });
+        });
+
+        // Fonction pour afficher les suggestions lorsque l'utilisateur tape dans le champ
+        nomInput.addEventListener('input', function() {
+            const inputValue = this.value.toLowerCase();
+            
+            // Vider et masquer le conteneur si l'entrée est trop courte
+            if (inputValue.length < 2) {
+                autocompleteContainer.innerHTML = '';
+                autocompleteContainer.style.display = 'none';
+                return;
+            }
+            
+            // Filtrer les participants dont le nom contient la saisie
+            const matches = participants.filter(participant => 
+                participant.nom.toLowerCase().includes(inputValue)
+            );
+            
+            // Afficher les suggestions
+            autocompleteContainer.innerHTML = '';
+            
+            if (matches.length > 0) {
+                const suggestionList = document.createElement('ul');
+                suggestionList.className = 'autocomplete-list';
+                
+                // Limiter à maximum 5 suggestions
+                const limitedMatches = matches.slice(0, 5);
+                
+                limitedMatches.forEach(participant => {
+                    const item = document.createElement('li');
+                    item.textContent = `${participant.nom} ${participant.prenom} - ${participant.organisme}`;
+                    item.className = 'autocomplete-item';
+                    
+                    // Quand on clique sur une suggestion, remplir tous les champs
+                    item.addEventListener('click', function() {
+                        document.getElementById('nom').value = participant.nom;
+                        document.getElementById('prenom').value = participant.prenom;
+                        document.getElementById('organisme').value = participant.organisme;
+                        document.getElementById('fonction').value = participant.fonction;
+                        document.getElementById('portable').value = participant.portable;
+                        document.getElementById('email').value = participant.email;
+                        document.getElementById('age').value = participant.age;
+                        
+                        // Masquer les suggestions
+                        autocompleteContainer.style.display = 'none';
+                    });
+                    
+                    suggestionList.appendChild(item);
+                });
+                
+                autocompleteContainer.appendChild(suggestionList);
+                autocompleteContainer.style.display = 'block';
+            } else {
+                autocompleteContainer.style.display = 'none';
+            }
+        });
+
+        // Masquer les suggestions quand on clique ailleurs
+        document.addEventListener('click', function(e) {
+            if (e.target !== nomInput && !autocompleteContainer.contains(e.target)) {
+                autocompleteContainer.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
